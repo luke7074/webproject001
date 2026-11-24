@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="380" fill="url(#bg2)"/>
+  <rect x="165" y="75" width="270" height="175" rx="12" fill="#020617" stroke="#94a3b8" stroke-width="4"/>
+  <rect x="177" y="87" width="246" height="151" rx="4" fill="#1e293b"/>
+  <path d="M135 250 H465 L450 268 H150 Z" fill="#cbd5e1"/>
+  <text x="300" y="335" font-family="sans-serif" font-size="15" font-weight="bold" fill="#e2e8f0" text-anchor="middle">NOTEBOOK · REALPRICE</text>
+</svg>

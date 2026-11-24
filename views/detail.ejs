@@ -1,0 +1,130 @@
+<%- include('partials/header') %>
+
+<%
+  const avgPrice = Number(marketStat.avg_price);
+  const diff = product.price - avgPrice;
+%>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="bg-white p-4 rounded-3 shadow-sm">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <span class="badge bg-dark me-1"><%= product.category %></span>
+          <span class="badge bg-info text-dark me-1"><%= product.model_name %></span>
+          <span class="badge <%= product.status === '판매중' ? 'bg-success' : (product.status === '예약중' ? 'bg-warning text-dark' : 'bg-secondary') %>">
+            <%= product.status %>
+          </span>
+        </div>
+        <span class="text-muted small">조회수 <%= product.views %> · <%= new Date(product.created_at).toLocaleDateString() %></span>
+      </div>
+
+      <h3 class="fw-bold mb-2"><%= product.title %></h3>
+      <div class="fs-3 fw-bolder text-primary mb-3">
+        <%= product.price.toLocaleString() %>원
+        <span class="fs-6 badge bg-light text-dark border ms-2">상태: <%= product.condition_grade %></span>
+      </div>
+
+      <!-- RealPrice 핵심 기능: 동일 모델 시세 자동 비교 리포트 -->
+      <div class="alert <%= diff <= 0 ? 'alert-success' : 'alert-warning' %> border-0 shadow-sm mb-4">
+        <div class="fw-bold mb-1">
+          <i class="bi bi-cpu-fill me-1"></i>RealPrice 시세 분석 결과 (동일 모델 <%= marketStat.sample_count %>건 기준)
+        </div>
+        <div class="small mb-2">
+          평균 시세: <strong><%= avgPrice.toLocaleString() %>원</strong> |
+          최저가: <strong><%= Number(marketStat.min_price).toLocaleString() %>원</strong> |
+          최고가: <strong><%= Number(marketStat.max_price).toLocaleString() %>원</strong>
+        </div>
+        <% if (diff < 0) { %>
+          <div class="fw-bold text-success">이 매물은 평균 시세보다 <%= Math.abs(diff).toLocaleString() %>원 저렴한 추천 매물입니다!</div>
+        <% } else if (diff > 0) { %>
+          <div class="fw-bold text-danger">이 매물은 평균 시세보다 <%= diff.toLocaleString() %>원 높게 등록되었습니다.</div>
+        <% } else { %>
+          <div class="fw-bold">이 매물은 현재 평균 시세와 정확히 일치합니다.</div>
+        <% } %>
+      </div>
+
+      <% if (product.image_path) { %>
+        <div class="mb-4 text-center">
+          <img src="<%= product.image_path %>" class="img-fluid rounded" style="max-height: 400px;">
+        </div>
+      <% } %>
+
+      <p style="white-space: pre-line; min-height: 120px;"><%= product.content %></p>
+
+      <hr>
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div>
+          <span class="fw-bold"><%= product.nickname %></span>
+          <span class="text-muted small ms-1">(<%= product.region %>)</span>
+        </div>
+
+        <div class="d-flex gap-2">
+          <% if (user) { %>
+            <form action="/products/<%= product.product_id %>/wish" method="POST">
+              <button class="btn <%= isWished ? 'btn-danger' : 'btn-outline-danger' %> btn-sm">
+                <i class="bi <%= isWished ? 'bi-heart-fill' : 'bi-heart' %>"></i> <%= isWished ? '찜 해제' : '찜하기' %>
+              </button>
+            </form>
+          <% } %>
+
+          <% if (user && user.user_id === product.user_id) { %>
+            <a href="/products/<%= product.product_id %>/edit" class="btn btn-outline-secondary btn-sm">수정</a>
+            <form action="/products/<%= product.product_id %>/delete" method="POST" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+              <button class="btn btn-outline-dark btn-sm">삭제</button>
+            </form>
+          <% } %>
+        </div>
+      </div>
+
+      <% if (user && user.user_id === product.user_id) { %>
+        <div class="mt-3 p-3 bg-light rounded d-flex align-items-center gap-2">
+          <span class="small fw-bold me-2">거래 상태 변경:</span>
+          <% ['판매중', '예약중', '거래완료'].forEach(st => { %>
+            <form action="/products/<%= product.product_id %>/status" method="POST">
+              <input type="hidden" name="status" value="<%= st %>">
+              <button class="btn btn-sm <%= product.status === st ? 'btn-dark' : 'btn-outline-dark' %>"><%= st %></button>
+            </form>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- 우측 거래 문의 및 가격 협상 댓글 -->
+  <div class="col-lg-4">
+    <div class="bg-white p-4 rounded-3 shadow-sm">
+      <h5 class="fw-bold mb-3">거래 문의 및 댓글 (<%= comments.length %>)</h5>
+
+      <% if (user) { %>
+        <form action="/products/<%= product.product_id %>/comments" method="POST" class="mb-3">
+          <textarea name="content" class="form-control mb-2" rows="2" placeholder="직거래 장소나 가격 문의를 남겨보세요." required></textarea>
+          <button class="btn btn-dark btn-sm w-100">댓글 등록</button>
+        </form>
+      <% } else { %>
+        <div class="alert alert-light border small text-center">
+          <a href="/auth/login">로그인</a> 후 거래 문의를 남길 수 있습니다.
+        </div>
+      <% } %>
+
+      <div class="d-flex flex-column gap-2">
+        <% comments.forEach(c => { %>
+          <div class="p-2 border rounded bg-light">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <strong class="small"><%= c.nickname %></strong>
+              <% if (user && user.user_id === c.user_id) { %>
+                <form action="/comments/<%= c.comment_id %>/delete" method="POST">
+                  <input type="hidden" name="product_id" value="<%= product.product_id %>">
+                  <button class="btn btn-link text-danger p-0 small text-decoration-none">삭제</button>
+                </form>
+              <% } %>
+            </div>
+            <div class="small"><%= c.content %></div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

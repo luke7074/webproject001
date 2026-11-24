@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380">
+  <defs>
+    <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="100%" stop-color="#3f3f46"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="380" fill="url(#bg3)"/>
+  <rect x="205" y="55" width="190" height="250" rx="16" fill="#09090b" stroke="#a1a1aa" stroke-width="4"/>
+  <rect x="217" y="67" width="166" height="226" rx="8" fill="#27272a"/>
+  <text x="300" y="345" font-family="sans-serif" font-size="15" font-weight="bold" fill="#d4d4d8" text-anchor="middle">TABLET · REALPRICE</text>
+</svg>

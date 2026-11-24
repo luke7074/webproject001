@@ -1,0 +1,41 @@
+<%- include('partials/header') %>
+
+<div class="bg-white p-4 rounded-3 shadow-sm">
+  <h4 class="fw-bold mb-1"><i class="bi bi-bar-chart-line-fill text-primary me-2"></i>RealPrice 모델별 실시간 시세표</h4>
+  <p class="text-muted small mb-4">등록된 모든 매물 데이터를 SQL 집계 함수(AVG, MIN, MAX)로 자동 정규화하여 산출한 실시간 시세입니다.</p>
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>카테고리</th>
+          <th>표준 모델명</th>
+          <th>누적 데이터</th>
+          <th>현재 판매중</th>
+          <th class="text-info">평균 시세</th>
+          <th class="text-success">최저가</th>
+          <th class="text-danger">최고가</th>
+          <th>매물 보기</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% stats.forEach(s => { %>
+          <tr>
+            <td><span class="badge bg-secondary"><%= s.category %></span></td>
+            <td class="fw-bold"><%= s.model_name %></td>
+            <td><%= s.total_count %>건</td>
+            <td><%= s.active_count %>건</td>
+            <td class="fw-bold text-primary"><%= Number(s.avg_price).toLocaleString() %>원</td>
+            <td class="text-success fw-semibold"><%= Number(s.min_price).toLocaleString() %>원</td>
+            <td class="text-danger fw-semibold"><%= Number(s.max_price).toLocaleString() %>원</td>
+            <td>
+              <a href="/?keyword=<%= encodeURIComponent(s.model_name) %>" class="btn btn-sm btn-outline-dark">매물 조회</a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

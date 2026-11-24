@@ -1,0 +1,18 @@
+<%- include('partials/header') %>
+<h4 class="fw-bold mb-3"><i class="bi bi-heart-fill text-danger me-2"></i>내 관심 매물 목록</h4>
+<div class="list-group shadow-sm">
+  <% if (products.length === 0) { %>
+    <div class="list-group-item py-4 text-center text-muted">찜한 매물이 없습니다.</div>
+  <% } %>
+  <% products.forEach(p => { %>
+    <a href="/products/<%= p.product_id %>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+      <div>
+        <span class="badge bg-secondary me-1"><%= p.status %></span>
+        <strong class="text-primary">[<%= p.model_name %>]</strong> <%= p.title %>
+        <div class="small text-muted mt-1"><%= p.nickname %> · <%= p.region %></div>
+      </div>
+      <span class="fw-bold fs-5"><%= p.price.toLocaleString() %>원</span>
+    </a>
+  <% }) %>
+</div>
+<%- include('partials/footer') %>

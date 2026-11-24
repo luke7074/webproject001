@@ -1,0 +1,17 @@
+<%- include('partials/header') %>
+<div class="bg-white p-4 rounded-3 shadow-sm mx-auto" style="max-width: 420px;">
+  <h4 class="fw-bold mb-3 text-center">RealPrice 로그인</h4>
+  <% if (error) { %><div class="alert alert-danger small"><%= error %></div><% } %>
+  <form action="/auth/login" method="POST">
+    <div class="mb-3">
+      <label class="form-label">아이디</label>
+      <input type="text" name="login_id" class="form-control" placeholder="테스트 계정: test1" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">비밀번호</label>
+      <input type="password" name="password" class="form-control" placeholder="테스트 비번: 1234" required>
+    </div>
+    <button type="submit" class="btn btn-dark w-100 fw-bold">로그인</button>
+  </form>
+</div>
+<%- include('partials/footer') %>

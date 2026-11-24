@@ -1,0 +1,73 @@
+<%- include('partials/header') %>
+
+<div class="bg-white p-4 rounded-3 shadow-sm mb-4">
+  <div class="row align-items-center g-3">
+    <div class="col-md-5">
+      <h4 class="fw-bold mb-1">거품 없는 IT 기기 직거래</h4>
+      <p class="text-muted small mb-0">매물을 클릭하면 동일 모델의 평균·최저·최고 시세를 즉시 비교해 드립니다.</p>
+    </div>
+    <div class="col-md-7">
+      <form action="/" method="GET" class="d-flex gap-2">
+        <input type="hidden" name="category" value="<%= category %>">
+        <input type="hidden" name="status" value="<%= status %>">
+        <input type="text" name="keyword" class="form-control" placeholder="모델명 또는 제목 검색 (예: 아이폰 15 프로, 맥북 에어 M2)" value="<%= keyword %>">
+        <button class="btn btn-dark px-4" type="submit">검색</button>
+      </form>
+    </div>
+  </div>
+
+  <hr class="my-3">
+  <div class="d-flex flex-wrap justify-content-between gap-2">
+    <div class="btn-group btn-group-sm">
+      <% ['전체', '노트북', '스마트폰', '태블릿', '주변기기'].forEach(cat => { %>
+        <a href="/?category=<%= cat %>&status=<%= status %>&keyword=<%= keyword %>"
+           class="btn <%= category === cat ? 'btn-dark' : 'btn-outline-secondary' %>"><%= cat %></a>
+      <% }) %>
+    </div>
+    <div class="btn-group btn-group-sm">
+      <% ['전체', '판매중', '예약중', '거래완료'].forEach(st => { %>
+        <a href="/?category=<%= category %>&status=<%= st %>&keyword=<%= keyword %>"
+           class="btn <%= status === st ? 'btn-primary' : 'btn-outline-primary' %>"><%= st %></a>
+      <% }) %>
+    </div>
+  </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  <% if (products.length === 0) { %>
+    <div class="col-12 text-center py-5 text-muted">조건에 맞는 등록된 매물이 없습니다.</div>
+  <% } %>
+  <% products.forEach(p => { %>
+    <div class="col">
+      <div class="card h-100 border-0 shadow-sm product-card">
+        <% if (p.image_path) { %>
+          <img src="<%= p.image_path %>" class="card-img-top" style="height: 190px; object-fit: cover;">
+        <% } else { %>
+          <div class="bg-secondary-subtle d-flex flex-column justify-content-center align-items-center text-secondary" style="height: 190px;">
+            <i class="bi bi-laptop fs-1"></i>
+            <span class="small mt-1"><%= p.category %> · <%= p.model_name %></span>
+          </div>
+        <% } %>
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge <%= p.status === '판매중' ? 'bg-success' : (p.status === '예약중' ? 'bg-warning text-dark' : 'bg-secondary') %>">
+              <%= p.status %>
+            </span>
+            <span class="badge bg-light text-dark border"><%= p.condition_grade %></span>
+          </div>
+          <div class="text-primary small fw-semibold mb-1">[<%= p.model_name %>]</div>
+          <h6 class="card-title fw-bold text-truncate">
+            <a href="/products/<%= p.product_id %>" class="text-decoration-none text-dark stretched-link"><%= p.title %></a>
+          </h6>
+          <div class="fs-5 fw-bolder text-dark mt-2"><%= p.price.toLocaleString() %>원</div>
+        </div>
+        <div class="card-footer bg-white border-top-0 d-flex justify-content-between text-muted small">
+          <span><i class="bi bi-geo-alt"></i> <%= p.region %></span>
+          <span>조회 <%= p.views %> · 댓글 <%= p.comment_count %> · 찜 <%= p.wish_count %></span>
+        </div>
+      </div>
+    </div>
+  <% }) %>
+</div>
+
+<%- include('partials/footer') %>

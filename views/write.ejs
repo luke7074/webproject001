@@ -1,0 +1,49 @@
+<%- include('partials/header') %>
+<div class="bg-white p-4 rounded-3 shadow-sm mx-auto" style="max-width: 700px;">
+  <h4 class="fw-bold mb-3">새 기기 매물 등록</h4>
+  <form action="/products/new" method="POST" enctype="multipart/form-data">
+    <div class="row g-3 mb-3">
+      <div class="col-md-4">
+        <label class="form-label fw-bold">카테고리</label>
+        <select name="category" class="form-select" required>
+          <option value="노트북">노트북</option>
+          <option value="스마트폰">스마트폰</option>
+          <option value="태블릿">태블릿</option>
+          <option value="주변기기">주변기기</option>
+        </select>
+      </div>
+      <div class="col-md-8">
+        <label class="form-label fw-bold">표준 모델명 (시세 비교 기준)</label>
+        <input type="text" name="model_name" class="form-control" placeholder="예: 아이폰 15 프로, 맥북 에어 M2" required>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label fw-bold">게시글 제목</label>
+      <input type="text" name="title" class="form-control" placeholder="용량, 색상, 특징을 포함해 적어주세요" required>
+    </div>
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <label class="form-label fw-bold">판매 가격 (원)</label>
+        <input type="number" name="price" class="form-control" placeholder="예: 950000" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-bold">외관 상태 등급</label>
+        <select name="condition_grade" class="form-select">
+          <option value="S급">S급 (미개봉/기스 없음)</option>
+          <option value="A급" selected>A급 (생활 기스 수준)</option>
+          <option value="B급">B급 (사용감/찍힘 있음)</option>
+        </select>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label fw-bold">제품 사진 (선택)</label>
+      <input type="file" name="image" class="form-control" accept="image/*">
+    </div>
+    <div class="mb-3">
+      <label class="form-label fw-bold">상세 설명</label>
+      <textarea name="content" class="form-control" rows="5" placeholder="배터리 효율, 구성품, 직거래 희망 장소를 적어주세요." required></textarea>
+    </div>
+    <button type="submit" class="btn btn-dark w-100 py-2 fw-bold">매물 등록하기</button>
+  </form>
+</div>
+<%- include('partials/footer') %>
